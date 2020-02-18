@@ -1,0 +1,27 @@
+Channel = 'space.sine.sinespacedemos'
+Player = Space.Scene.PlayerAvatar
+
+function StartAnim()
+
+  Animation = Space.GetResource('Die')
+  Player.PlayCustomAnimation(Animation)
+
+  Space.Network.SendNetworkMessage(Channel, {User = Player.Username, Anim = Animation.Name})
+
+end
+
+function HandleNetwork(Data)
+
+  AnimPlayer = Space.Scene.GetAvatar(Data.Message.User)
+  Animation = Space.GetResource(Data.Message.Anim)
+  AnimPlayer.PlayCustomAnimation(Animation)
+
+end
+
+function Init()
+
+  Space.Network.SendNetworkMessage(Channel, HandleNetwork)
+
+end
+
+Init()
